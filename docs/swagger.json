@@ -8,9 +8,9 @@
     },
     "host": "localhost:1323",
     "paths": {
-        "/api/v1/wallets": {
+        "/api/v1/users/:id/wallets": {
             "get": {
-                "description": "Get all wallets",
+                "description": "Get wallets by UserID",
                 "consumes": [
                     "application/json"
                 ],
@@ -20,7 +20,7 @@
                 "tags": [
                     "wallet"
                 ],
-                "summary": "Get all wallets",
+                "summary": "Get wallets by UserID",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -37,9 +37,9 @@
                 }
             }
         },
-        "/api/v1/wallets/user/:id": {
+        "/api/v1/wallets": {
             "get": {
-                "description": "Get wallets by UserID",
+                "description": "Get all wallets",
                 "consumes": [
                     "application/json"
                 ],
@@ -49,7 +49,7 @@
                 "tags": [
                     "wallet"
                 ],
-                "summary": "Get wallets by UserID",
+                "summary": "Get all wallets",
                 "responses": {
                     "200": {
                         "description": "OK",

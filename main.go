@@ -25,7 +25,7 @@ func main() {
 	v1 := e.Group("/api/v1")
 	{
 		v1.GET("/wallets", handler.WalletHandler)
-		v1.GET("/wallets/user/:id", handler.WalletByUserHandler)
+		v1.GET("/users/:id/wallets", handler.WalletByUserHandler)
 		v1.GET("/wallets/wallet", handler.WalletTypeQueryHandler)
 	}
 
