@@ -27,6 +27,7 @@ func main() {
 		v1.GET("/wallets", handler.WalletHandler)
 		v1.GET("/users/:id/wallets", handler.WalletByUserHandler)
 		v1.GET("/wallets/wallet", handler.WalletTypeQueryHandler)
+		v1.POST("/wallets", handler.CreateWalletHandler)
 	}
 
 	e.Logger.Fatal(e.Start(":1323"))

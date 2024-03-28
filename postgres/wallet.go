@@ -1,8 +1,10 @@
 package postgres
 
 import (
+	"log"
 	"time"
 
+	_ "github.com/lib/pq"
 	"github.com/openmymai/fun-exercise-api/wallet"
 )
 
@@ -14,6 +16,10 @@ type Wallet struct {
 	WalletType string    `postgres:"wallet_type"`
 	Balance    float64   `postgres:"balance"`
 	CreatedAt  time.Time `postgres:"created_at"`
+}
+
+type Err struct {
+	Message string `json:"message"`
 }
 
 func (p *Postgres) Wallets() ([]wallet.Wallet, error) {
@@ -107,4 +113,14 @@ func (p *Postgres) WalletsQuery(name string) ([]wallet.Wallet, error) {
 		})
 	}
 	return wallets, nil
+}
+
+func (p *Postgres) CreateWallet(w wallet.Wallet) (wallet.Wallet, error) {
+	row := p.Db.QueryRow("INSERT INTO user_wallet (user_id, user_name, wallet_name, wallet_type, balance) values ($1, $2, $3, $4, $5) RETURNING id", w.UserID, w.UserName, w.WalletName, w.WalletType, w.Balance)
+	err := row.Scan(&w.ID)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return w, err
 }
