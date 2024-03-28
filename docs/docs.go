@@ -15,9 +15,9 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1/wallets": {
+        "/api/v1/users/:id/wallets": {
             "get": {
-                "description": "Get all wallets",
+                "description": "Get wallets by UserID",
                 "consumes": [
                     "application/json"
                 ],
@@ -27,7 +27,7 @@ const docTemplate = `{
                 "tags": [
                     "wallet"
                 ],
-                "summary": "Get all wallets",
+                "summary": "Get wallets by UserID",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -44,9 +44,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/wallets/user/:id": {
+        "/api/v1/wallets": {
             "get": {
-                "description": "Get wallets by UserID",
+                "description": "Get all wallets",
                 "consumes": [
                     "application/json"
                 ],
@@ -56,7 +56,7 @@ const docTemplate = `{
                 "tags": [
                     "wallet"
                 ],
-                "summary": "Get wallets by UserID",
+                "summary": "Get all wallets",
                 "responses": {
                     "200": {
                         "description": "OK",

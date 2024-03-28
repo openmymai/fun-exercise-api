@@ -50,7 +50,7 @@ func (h *Handler) WalletHandler(c echo.Context) error {
 //	@Accept			json
 //	@Produce		json
 //	@Success		200	{object}	Wallet
-//	@Router			/api/v1/wallets/user/:id [get]
+//	@Router			/api/v1/users/:id/wallets [get]
 //	@Failure		500	{object}	Err
 func (h *Handler) WalletByUserHandler(c echo.Context) error {
 	id := c.Param("id")
