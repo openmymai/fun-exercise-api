@@ -57,7 +57,7 @@ func TestWallet(t *testing.T) {
 		stubError := StubWallet{err: echo.ErrInternalServerError}
 		p := New(stubError)
 
-		p.WalletHandler(c)
+		p.WalletsHandler(c)
 
 		if rec.Code != http.StatusInternalServerError {
 			t.Errorf("expected status code %d but got %d", http.StatusInternalServerError, rec.Code)
@@ -82,7 +82,7 @@ func TestWallet(t *testing.T) {
 		}
 		p := New(stubUser)
 
-		p.WalletTypeQueryHandler(c)
+		p.WalletsTypeQueryHandler(c)
 
 		wantWalletType := "Savings"
 		want := []Wallet{
@@ -118,7 +118,7 @@ func TestWallet(t *testing.T) {
 		}
 		p := New(stubUser)
 
-		p.WalletByUserHandler(c)
+		p.WalletsByUserHandler(c)
 
 		wantUserName := "John Doe"
 		want := []Wallet{

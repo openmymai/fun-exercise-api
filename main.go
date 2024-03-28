@@ -29,9 +29,9 @@ func main() {
 	handler := wallet.New(p)
 	v1 := e.Group("/api/v1")
 	{
-		v1.GET("/wallets", handler.WalletHandler)
-		v1.GET("/users/:id/wallets", handler.WalletByUserHandler)
-		v1.GET("/wallets/wallet", handler.WalletTypeQueryHandler)
+		v1.GET("/wallets", handler.WalletsHandler)
+		v1.GET("/users/:id/wallets", handler.WalletsByUserHandler)
+		v1.GET("/wallets/wallet", handler.WalletsTypeQueryHandler)
 		v1.POST("/wallets", handler.CreateWalletHandler)
 		v1.PUT("/wallets/:id", handler.UpdateWalletHandler)
 		v1.DELETE("/users/:id/wallets", handler.DeleteWalletHandler)

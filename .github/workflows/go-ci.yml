@@ -2,17 +2,29 @@ name: Go CI
 
 on: [push]
 
+# jobs:
+#     build:
+#         runs-on: ubuntu-latest
+#         strategy:
+#             matrix:
+#                 go-version: ['1.21.8', '1.22.1']
+#         steps:
+#             - uses: actions/checkout@v4
+#             - name: Setup Go ${{ matrix.go-version }}
+#               uses: actions/setup-go@v4
+#               with:
+#                   go-version: ${{ matrix.go-version }}
+#             - name: Display Go version
+#               run: go version
+
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                go-version: ['1.21.8', '1.22.1']
-        steps:
-            - uses: actions/checkout@v4
-            - name: Setup Go ${{ matrix.go-version }}
-              uses: actions/setup-go@v4
-              with:
-                  go-version: ${{ matrix.go-version }}
-            - name: Display Go version
-              run: go version
+  build-and-push-docker-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the docker image
+        run: docker build . --file Dockerfile
+    #   - name: Unit test inside docker compose cleanup
+    #     run: docker-compose -f docker-compose.yaml down
+    #   - name: Unit test inside docker compose
+    #     run: docker-compose -f docker-compose.yaml up --build --abort-on-container-exit --exit-code-from it_tests

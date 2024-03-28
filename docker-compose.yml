@@ -4,6 +4,16 @@ networks:
   funx:
 
 services:
+  it_tests:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.test
+    volumes:
+      - $PWD:/go/src/target
+    depends_on:
+      - postgres
+    networks:
+      - funx
   postgres:
     image: postgres:16.0
     environment:
