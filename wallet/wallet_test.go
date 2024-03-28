@@ -13,6 +13,7 @@ import (
 type StubWallet struct {
 	wallets       []Wallet
 	walletsByUser []Wallet
+	walletsQuery  []Wallet
 	err           error
 }
 
@@ -22,6 +23,10 @@ func (s StubWallet) Wallets() ([]Wallet, error) {
 
 func (s StubWallet) WalletsByUser(id string) ([]Wallet, error) {
 	return s.walletsByUser, s.err
+}
+
+func (s StubWallet) WalletsQuery(id string) ([]Wallet, error) {
+	return s.walletsQuery, s.err
 }
 
 func TestWallet(t *testing.T) {
@@ -49,7 +54,7 @@ func TestWallet(t *testing.T) {
 		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 		rec := httptest.NewRecorder()
 		c := e.NewContext(req, rec)
-		c.SetPath("/api/v1/wallets/:id")
+		c.SetPath("/api/v1/wallets/user/:id")
 		c.SetParamNames("id")
 		c.SetParamValues("1")
 
@@ -69,6 +74,41 @@ func TestWallet(t *testing.T) {
 			{ID: 1, UserID: 1, UserName: wantUserName, WalletType: "Savings"},
 			{ID: 2, UserID: 1, UserName: wantUserName, WalletType: "Credit Card"},
 			{ID: 3, UserID: 1, UserName: wantUserName, WalletType: "Crypto Wallet"},
+		}
+		gotJson := rec.Body.Bytes()
+		var got []Wallet
+		if err := json.Unmarshal(gotJson, &got); err != nil {
+			t.Errorf("unable to unmarshal json: %v", err)
+		}
+		if !reflect.DeepEqual(got, want) {
+			t.Errorf("expected %v but got %v", want, got)
+		}
+	})
+
+	t.Run("given wallet type able to getting wallet should return list of wallets", func(t *testing.T) {
+		e := echo.New()
+		req := httptest.NewRequest(http.MethodGet, "/", nil)
+		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+		rec := httptest.NewRecorder()
+		c := e.NewContext(req, rec)
+		c.SetPath("/api/v1/wallets")
+		c.SetParamNames("wallet_type")
+		c.SetParamValues("Savings")
+
+		stubUser := StubWallet{
+			walletsQuery: []Wallet{
+				{UserName: "John Doe", WalletName: "John Savings", WalletType: "Savings"},
+				{UserName: "Jane Doe", WalletName: "Jane Savings", WalletType: "Savings"},
+			},
+		}
+		p := New(stubUser)
+
+		p.WalletTypeQueryHandler(c)
+
+		wantWalletType := "Savings"
+		want := []Wallet{
+			{UserName: "John Doe", WalletName: "John Savings", WalletType: wantWalletType},
+			{UserName: "Jane Doe", WalletName: "Jane Savings", WalletType: wantWalletType},
 		}
 		gotJson := rec.Body.Bytes()
 		var got []Wallet
