@@ -73,6 +73,24 @@ paths:
       summary: Get all wallets
       tags:
       - wallet
+    post:
+      consumes:
+      - application/json
+      description: Create wallets
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/wallet.Wallet'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/wallet.Err'
+      summary: Create wallets
+      tags:
+      - wallet
   /api/v1/wallets/wallet:
     get:
       consumes:
