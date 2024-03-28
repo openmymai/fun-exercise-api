@@ -125,7 +125,7 @@ func (p *Postgres) CreateWallet(w wallet.Wallet) (wallet.Wallet, error) {
 	return w, err
 }
 
-func (p *Postgres) UpdateWallet(w wallet.Wallet, id int) (wallet.Wallet, error) {
+func (p *Postgres) UpdateWallet(w wallet.Wallet, id string) (wallet.Wallet, error) {
 	row := p.Db.QueryRow("UPDATE user_wallet SET user_id = $2, user_name = $3, wallet_name = $4, wallet_type = $5, balance = $6 WHERE id = $1 RETURNING id", id, w.UserID, w.UserName, w.WalletName, w.WalletType, w.Balance)
 	err := row.Scan(&id)
 	if err != nil {
@@ -133,4 +133,14 @@ func (p *Postgres) UpdateWallet(w wallet.Wallet, id int) (wallet.Wallet, error) 
 	}
 
 	return w, nil
+}
+
+func (p *Postgres) DeleteWallet(id string) error {
+	row, err := p.Db.Query("DELETE FROM user_wallet WHERE user_id = $1", id)
+	row.Scan(&id)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return nil
 }

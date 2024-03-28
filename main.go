@@ -34,6 +34,7 @@ func main() {
 		v1.GET("/wallets/wallet", handler.WalletTypeQueryHandler)
 		v1.POST("/wallets", handler.CreateWalletHandler)
 		v1.PUT("/wallets/:id", handler.UpdateWalletHandler)
+		v1.DELETE("/users/:id/wallets", handler.DeleteWalletHandler)
 	}
 
 	e.Logger.Fatal(e.Start(":1323"))
