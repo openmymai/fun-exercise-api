@@ -1,17 +1,35 @@
-
 version: '3'
 
+networks:
+  funx:
+
 services:
-    postgres:
-        image: postgres:16.0
-        environment:
-            POSTGRES_DB: wallet
-            POSTGRES_USER: root
-            POSTGRES_PASSWORD: password
-        volumes:
-            - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-        ports:
-            - "5432:5432"
+  api:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    restart: always
+    environment:
+      - DATABASE_URL=postgres://root:password@postgres/wallet?sslmode=disable
+    depends_on:
+      - postgres
+    networks:
+      - funx
+    ports:
+      - '1323:1323'
+  postgres:
+    image: postgres:16.0
+    environment:
+      POSTGRES_DB: wallet
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: password
+    restart: on-failure
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - '5432:5432'
+    networks:
+      - funx
 
 volumes:
-    pgdata:
+  pgdata:
