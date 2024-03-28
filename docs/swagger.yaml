@@ -36,6 +36,24 @@ info:
   version: "1.0"
 paths:
   /api/v1/users/:id/wallets:
+    delete:
+      consumes:
+      - application/json
+      description: Delete wallet
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/wallet.Wallet'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/wallet.Err'
+      summary: Delete wallet
+      tags:
+      - wallet
     get:
       consumes:
       - application/json

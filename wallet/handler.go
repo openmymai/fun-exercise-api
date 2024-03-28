@@ -1,9 +1,7 @@
 package wallet
 
 import (
-	"log"
 	"net/http"
-	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -17,7 +15,8 @@ type Storer interface {
 	WalletsByUser(id string) ([]Wallet, error)
 	WalletsQuery(name string) ([]Wallet, error)
 	CreateWallet(wallet Wallet) (Wallet, error)
-	UpdateWallet(wallet Wallet, id int) (Wallet, error)
+	UpdateWallet(wallet Wallet, id string) (Wallet, error)
+	DeleteWallet(id string) error
 }
 
 func New(db Storer) *Handler {
@@ -123,20 +122,37 @@ func (h *Handler) CreateWalletHandler(c echo.Context) error {
 //	@Failure		500	{object}	Err
 func (h *Handler) UpdateWalletHandler(c echo.Context) error {
 	id := c.Param("id")
-	idInt, err := strconv.Atoi(id)
-	if err != nil {
-		log.Fatal(err)
-	}
 
 	wallet := Wallet{}
-	err = c.Bind(&wallet)
+	err := c.Bind(&wallet)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, Err{Message: err.Error()})
 	}
-	updateWallet, err := h.store.UpdateWallet(wallet, idInt)
+	updateWallet, err := h.store.UpdateWallet(wallet, id)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, Err{Message: err.Error()})
 	}
 
 	return c.JSON(http.StatusCreated, updateWallet)
+}
+
+// DeleteWalletHandler
+//
+//	@Summary		Delete wallet
+//	@Description	Delete wallet
+//	@Tags			wallet
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	Wallet
+//	@Router			/api/v1/users/:id/wallets [delete]
+//	@Failure		500	{object}	Err
+func (h *Handler) DeleteWalletHandler(c echo.Context) error {
+	id := c.Param("id")
+
+	err := h.store.DeleteWallet(id)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, Err{Message: err.Error()})
+	}
+
+	return c.JSON(http.StatusOK, "Delete "+id+" successful")
 }

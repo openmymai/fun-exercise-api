@@ -35,8 +35,12 @@ func (s StubWallet) CreateWallet(wallet Wallet) (Wallet, error) {
 	return s.createWallet, s.err
 }
 
-func (s StubWallet) UpdateWallet(wallet Wallet, id int) (Wallet, error) {
+func (s StubWallet) UpdateWallet(wallet Wallet, id string) (Wallet, error) {
 	return s.updateWallet, s.err
+}
+
+func (s StubWallet) DeleteWallet(id string) error {
+	return s.err
 }
 
 func TestWallet(t *testing.T) {
