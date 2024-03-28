@@ -25,7 +25,7 @@ definitions:
         example: John's Wallet
         type: string
       wallet_type:
-        example: Create Card
+        example: Credit Card
         type: string
     type: object
 host: localhost:1323
@@ -76,7 +76,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: Create wallets
+      description: Create wallet
       produces:
       - application/json
       responses:
@@ -88,7 +88,25 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/wallet.Err'
-      summary: Create wallets
+      summary: Create wallet
+      tags:
+      - wallet
+    put:
+      consumes:
+      - application/json
+      description: Update wallet
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/wallet.Wallet'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/wallet.Err'
+      summary: Update wallet
       tags:
       - wallet
   /api/v1/wallets/wallet:

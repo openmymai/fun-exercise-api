@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"github.com/openmymai/fun-exercise-api/postgres"
 	"github.com/openmymai/fun-exercise-api/wallet"
 
@@ -20,7 +21,11 @@ func main() {
 	}
 
 	e := echo.New()
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
+
 	handler := wallet.New(p)
 	v1 := e.Group("/api/v1")
 	{
@@ -28,6 +33,7 @@ func main() {
 		v1.GET("/users/:id/wallets", handler.WalletByUserHandler)
 		v1.GET("/wallets/wallet", handler.WalletTypeQueryHandler)
 		v1.POST("/wallets", handler.CreateWalletHandler)
+		v1.PUT("/wallets/:id", handler.UpdateWalletHandler)
 	}
 
 	e.Logger.Fatal(e.Start(":1323"))
