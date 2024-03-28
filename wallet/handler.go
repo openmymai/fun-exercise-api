@@ -1,7 +1,9 @@
 package wallet
 
 import (
+	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -15,6 +17,7 @@ type Storer interface {
 	WalletsByUser(id string) ([]Wallet, error)
 	WalletsQuery(name string) ([]Wallet, error)
 	CreateWallet(wallet Wallet) (Wallet, error)
+	UpdateWallet(wallet Wallet, id int) (Wallet, error)
 }
 
 func New(db Storer) *Handler {
@@ -86,8 +89,8 @@ func (h *Handler) WalletTypeQueryHandler(c echo.Context) error {
 
 // CreateWalletHandler
 //
-//	@Summary		Create wallets
-//	@Description	Create wallets
+//	@Summary		Create wallet
+//	@Description	Create wallet
 //	@Tags			wallet
 //	@Accept			json
 //	@Produce		json
@@ -102,8 +105,38 @@ func (h *Handler) CreateWalletHandler(c echo.Context) error {
 	}
 	wallet, err := h.store.CreateWallet(w)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, Err{Message: err.Error()})
+		return c.JSON(http.StatusInternalServerError, Err{Message: err.Error()})
 	}
 
 	return c.JSON(http.StatusCreated, wallet)
+}
+
+// UpdateWalletHandler
+//
+//	@Summary		Update wallet
+//	@Description	Update wallet
+//	@Tags			wallet
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	Wallet
+//	@Router			/api/v1/wallets [put]
+//	@Failure		500	{object}	Err
+func (h *Handler) UpdateWalletHandler(c echo.Context) error {
+	id := c.Param("id")
+	idInt, err := strconv.Atoi(id)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	wallet := Wallet{}
+	err = c.Bind(&wallet)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, Err{Message: err.Error()})
+	}
+	updateWallet, err := h.store.UpdateWallet(wallet, idInt)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, Err{Message: err.Error()})
+	}
+
+	return c.JSON(http.StatusCreated, updateWallet)
 }

@@ -84,8 +84,8 @@ func (p *Postgres) WalletsByUser(id string) ([]wallet.Wallet, error) {
 	return wallets, nil
 }
 
-func (p *Postgres) WalletsQuery(name string) ([]wallet.Wallet, error) {
-	rows, err := p.Db.Query("SELECT * FROM user_wallet WHERE wallet_type = $1", name)
+func (p *Postgres) WalletsQuery(wallet_type string) ([]wallet.Wallet, error) {
+	rows, err := p.Db.Query("SELECT * FROM user_wallet WHERE wallet_type = $1", wallet_type)
 	if err != nil {
 		return nil, err
 	}
@@ -123,4 +123,14 @@ func (p *Postgres) CreateWallet(w wallet.Wallet) (wallet.Wallet, error) {
 	}
 
 	return w, err
+}
+
+func (p *Postgres) UpdateWallet(w wallet.Wallet, id int) (wallet.Wallet, error) {
+	row := p.Db.QueryRow("UPDATE user_wallet SET user_id = $2, user_name = $3, wallet_name = $4, wallet_type = $5, balance = $6 WHERE id = $1 RETURNING id", id, w.UserID, w.UserName, w.WalletName, w.WalletType, w.Balance)
+	err := row.Scan(&id)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return w, nil
 }

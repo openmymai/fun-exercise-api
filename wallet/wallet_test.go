@@ -15,6 +15,7 @@ type StubWallet struct {
 	walletsByUser []Wallet
 	walletsQuery  []Wallet
 	createWallet  Wallet
+	updateWallet  Wallet
 	err           error
 }
 
@@ -32,6 +33,10 @@ func (s StubWallet) WalletsByUser(id string) ([]Wallet, error) {
 
 func (s StubWallet) CreateWallet(wallet Wallet) (Wallet, error) {
 	return s.createWallet, s.err
+}
+
+func (s StubWallet) UpdateWallet(wallet Wallet, id int) (Wallet, error) {
+	return s.updateWallet, s.err
 }
 
 func TestWallet(t *testing.T) {

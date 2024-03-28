@@ -72,8 +72,8 @@ const docTemplate = `{
                     }
                 }
             },
-            "post": {
-                "description": "Create wallets",
+            "put": {
+                "description": "Update wallet",
                 "consumes": [
                     "application/json"
                 ],
@@ -83,7 +83,34 @@ const docTemplate = `{
                 "tags": [
                     "wallet"
                 ],
-                "summary": "Create wallets",
+                "summary": "Update wallet",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/wallet.Wallet"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/wallet.Err"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create wallet",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "wallet"
+                ],
+                "summary": "Create wallet",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -176,7 +203,7 @@ const docTemplate = `{
                 },
                 "wallet_type": {
                     "type": "string",
-                    "example": "Create Card"
+                    "example": "Credit Card"
                 }
             }
         }
