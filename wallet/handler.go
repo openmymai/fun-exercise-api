@@ -37,7 +37,7 @@ type Err struct {
 //	@Success		200	{object}	Wallet
 //	@Router			/api/v1/wallets [get]
 //	@Failure		500	{object}	Err
-func (h *Handler) WalletHandler(c echo.Context) error {
+func (h *Handler) WalletsHandler(c echo.Context) error {
 	wallets, err := h.store.Wallets()
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, Err{Message: err.Error()})
@@ -55,7 +55,7 @@ func (h *Handler) WalletHandler(c echo.Context) error {
 //	@Success		200	{object}	Wallet
 //	@Router			/api/v1/users/:id/wallets [get]
 //	@Failure		500	{object}	Err
-func (h *Handler) WalletByUserHandler(c echo.Context) error {
+func (h *Handler) WalletsByUserHandler(c echo.Context) error {
 	id := c.Param("id")
 	wallets, err := h.store.WalletsByUser(id)
 	if err != nil {
@@ -76,7 +76,7 @@ func (h *Handler) WalletByUserHandler(c echo.Context) error {
 //	@Success		200	{object}	Wallet
 //	@Router			/api/v1/wallets/wallet [get]
 //	@Failure		500	{object}	Err
-func (h *Handler) WalletTypeQueryHandler(c echo.Context) error {
+func (h *Handler) WalletsTypeQueryHandler(c echo.Context) error {
 	name := c.QueryParam("wallet_type")
 	wallets, err := h.store.WalletsQuery(name)
 	if err != nil {
